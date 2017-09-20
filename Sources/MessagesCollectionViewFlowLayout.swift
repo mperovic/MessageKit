@@ -201,9 +201,9 @@ extension MessagesCollectionViewFlowLayout {
 
         switch attributes.avatarHorizontalAlignment {
         case .cellLeading:
-            origin.x = 0
+            origin.x = 15
         case .cellTrailing:
-            origin.x = contentWidth - avatarWidth
+            origin.x = contentWidth - avatarWidth - 15
         }
 
         let contentHeight = attributes.frame.height
@@ -412,11 +412,11 @@ extension MessagesCollectionViewFlowLayout {
         case (.cellTrailing, _):
             origin.x = attributes.frame.width - attributes.cellTopLabelFrame.width
         case (.messageLeading, .cellLeading):
-            origin.x = attributes.avatarFrame.width + avatarMessagePadding
+            origin.x = attributes.avatarFrame.width + avatarMessagePadding + 15
         case (.messageLeading, .cellTrailing):
             origin.x = attributes.frame.width - attributes.avatarFrame.width - avatarMessagePadding - attributes.messageContainerFrame.width
         case (.messageTrailing, .cellTrailing):
-            origin.x = attributes.frame.width - attributes.avatarFrame.width - avatarMessagePadding - attributes.cellTopLabelFrame.width
+            origin.x = attributes.frame.width - attributes.avatarFrame.width - avatarMessagePadding - attributes.cellTopLabelFrame.width - 15
         case (.messageTrailing, .cellLeading):
             origin.x = attributes.frame.width - messageToViewEdgePadding - attributes.cellTopLabelFrame.width
         }

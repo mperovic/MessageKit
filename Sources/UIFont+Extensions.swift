@@ -11,6 +11,6 @@ import Foundation
 extension UIFont {
 	
 	static func defaultMessageLabelFont() -> UIFont {
-		return UIFont.systemFont(ofSize: 17)
+		return UIFont.systemFont(ofSize: 15)
 	}
 }
