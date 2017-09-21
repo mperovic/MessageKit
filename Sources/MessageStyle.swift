@@ -66,6 +66,7 @@ public enum MessageStyle {
 
     case none
     case bubble
+    case bubbleSumma
     case bubbleOutline
     case bubbleTail(TailCorner, TailStyle)
     case bubbleTailOutline(TailCorner, TailStyle)
@@ -81,7 +82,7 @@ public enum MessageStyle {
         switch self {
         case .none:
             return nil
-        case .bubble, .bubbleOutline:
+        case .bubble, .bubbleOutline, .bubbleSumma:
             break
         case .bubbleTail(let corner, _), .bubbleTailOutline(let corner, _):
             guard let cgImage = image.cgImage else { return nil }
@@ -97,6 +98,8 @@ public enum MessageStyle {
         switch self {
         case .bubble:
             return "bubble_full"
+        case .bubbleSumma:
+            return "bubble_full_summa"
         case .bubbleOutline:
             return "bubble_outlined"
         case .bubbleTail(_, let tailStyle):
