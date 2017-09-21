@@ -120,6 +120,7 @@ open class MessageInputBar: UIView {
     
     open var sendButtonImage: InputBarButtonItem = {
         return InputBarButtonItem().configure {
+            $0.setSize(CGSize(width: 26, height: 26), animated: false)
             $0.image = #imageLiteral(resourceName: "ic_send")
             $0.isHidden = true
             }.onTouchUpInside {
@@ -129,6 +130,7 @@ open class MessageInputBar: UIView {
     
     open var sendMediaButton: InputBarButtonItem = {
         return InputBarButtonItem().configure {
+            $0.setSize(CGSize(width: 19.2, height: 21), animated: false)
             $0.image = #imageLiteral(resourceName: "paperclip")
             }.onTouchUpInside {
                 $0.messageInputBar?.didSelectMediaButton()
@@ -278,14 +280,14 @@ open class MessageInputBar: UIView {
         
         leftStackViewLayoutSet = NSLayoutConstraintSet(
             top:    inputTextView.topAnchor.constraint(equalTo: topAnchor, constant: padding.top),
-            bottom: leftStackView.bottomAnchor.constraint(equalTo: inputTextView.bottomAnchor, constant: 0),
+            bottom: leftStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -11),
             left:   leftStackView.leftAnchor.constraint(equalTo: leftAnchor, constant: padding.left),
             width:  leftStackView.widthAnchor.constraint(equalToConstant: leftStackViewWidthContant)
             ).activate()
         
         rightStackViewLayoutSet = NSLayoutConstraintSet(
             top:    inputTextView.topAnchor.constraint(equalTo: topAnchor, constant: padding.top),
-            bottom: rightStackView.bottomAnchor.constraint(equalTo: inputTextView.bottomAnchor, constant: 0),
+            bottom: rightStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -9),
             right:  rightStackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -padding.right),
             width:  rightStackView.widthAnchor.constraint(equalToConstant: rightStackViewWidthContant)
             ).activate()
@@ -297,8 +299,7 @@ open class MessageInputBar: UIView {
             right:  bottomStackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -padding.right)
             ).activate()
         
-        leftStackView.centerYAnchor.constraint(equalTo: self.inputTextView.centerYAnchor).isActive = true
-        rightStackView.centerYAnchor.constraint(equalTo: self.inputTextView.centerYAnchor).isActive = true
+        self.heightAnchor.constraint(equalToConstant: 44)
     }
     
     private func updateViewContraints() {
