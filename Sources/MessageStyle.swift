@@ -67,9 +67,9 @@ public enum MessageStyle {
     case none
     case bubble
     case bubbleSumma
-    case bubbleOutline
+    case bubbleOutline(UIColor)
     case bubbleTail(TailCorner, TailStyle)
-    case bubbleTailOutline(TailCorner, TailStyle)
+    case bubbleTailOutline(UIColor, TailCorner, TailStyle)
 
     // MARK: - Public
 
@@ -84,7 +84,7 @@ public enum MessageStyle {
             return nil
         case .bubble, .bubbleOutline, .bubbleSumma:
             break
-        case .bubbleTail(let corner, _), .bubbleTailOutline(let corner, _):
+        case .bubbleTail(let corner, _), .bubbleTailOutline(_, let corner, _):
             guard let cgImage = image.cgImage else { return nil }
             image = UIImage(cgImage: cgImage, scale: image.scale, orientation: corner.imageOrientation)
         }
@@ -104,7 +104,7 @@ public enum MessageStyle {
             return "bubble_outlined"
         case .bubbleTail(_, let tailStyle):
             return "bubble_full" + tailStyle.imageNameSuffix
-        case .bubbleTailOutline(_, let tailStyle):
+        case .bubbleTailOutline(_, _, let tailStyle):
             return "bubble_outlined" + tailStyle.imageNameSuffix
         case .none:
             return nil
@@ -114,7 +114,7 @@ public enum MessageStyle {
     private var imagePath: String? {
         guard let imageName = imageName else { return nil }
         let assetBundle = Bundle.messageKitAssetBundle()
-        return assetBundle.path(forResource: imageName, ofType: "png")
+        return assetBundle.path(forResource: imageName, ofType: "png", inDirectory: "Images")
     }
 
     private func stretch(_ image: UIImage) -> UIImage {
