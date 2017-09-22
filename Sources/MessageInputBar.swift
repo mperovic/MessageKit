@@ -485,8 +485,7 @@ open class MessageInputBar: UIView {
     }
     
     open func didSelectMediaButton() {
-        //delegate?.messageInputBar(self, didPressSendButtonWith: inputTextView.text)
-        //textViewDidChange()
+        delegate?.messageInputBar(didPressSendMediaButton: self)
     }
     
     open func didSelectAudioButton() {

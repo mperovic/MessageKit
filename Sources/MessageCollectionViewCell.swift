@@ -47,6 +47,7 @@ open class MessageCollectionViewCell<ContentView: UIView>: UICollectionViewCell 
         let contentView = ContentView()
         contentView.clipsToBounds = true
         contentView.isUserInteractionEnabled = true
+        contentView.contentMode = .scaleAspectFill
         return contentView
     }()
 

@@ -29,6 +29,8 @@ public protocol MessageInputBarDelegate: class {
     
     func messageInputBar(_ inputBar: MessageInputBar, didPressSendButtonWith text: String)
     
+    func messageInputBar(didPressSendMediaButton inputBar: MessageInputBar)
+    
     func messageInputBar(_ inputBar: MessageInputBar, didChangeIntrinsicContentTo size: CGSize)
     
     func messageInputBar(_ inputBar: MessageInputBar, textViewTextDidChangeTo text: String)
@@ -38,6 +40,8 @@ public protocol MessageInputBarDelegate: class {
 public extension MessageInputBarDelegate {
     
     func messageInputBar(_ inputBar: MessageInputBar, didPressSendButtonWith text: String) {}
+    
+    func messageInputBar(didPressSendMediaButton inputBar: MessageInputBar) {}
     
     func messageInputBar(_ inputBar: MessageInputBar, didChangeIntrinsicContentTo size: CGSize) {}
     
