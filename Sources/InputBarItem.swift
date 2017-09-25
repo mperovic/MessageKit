@@ -43,11 +43,11 @@ open class InputBarButtonItem: UIButton {
         didSet {
             switch spacing {
             case .flexible:
-                setContentHuggingPriority(1, for: .horizontal)
+              setContentHuggingPriority(UILayoutPriority(rawValue: 1), for: .horizontal)
             case .fixed:
-                setContentHuggingPriority(1000, for: .horizontal)
+              setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
             case .none:
-                setContentHuggingPriority(500, for: .horizontal)
+              setContentHuggingPriority(UILayoutPriority(rawValue: 500), for: .horizontal)
             }
         }
     }
@@ -115,6 +115,7 @@ open class InputBarButtonItem: UIButton {
     // MARK: - Hooks
     
     private var onTouchUpInsideAction: InputBarButtonItemAction?
+    private var onTouchDownInsideAction: InputBarButtonItemAction?
     private var onKeyboardEditingBeginsAction: InputBarButtonItemAction?
     private var onKeyboardEditingEndsAction: InputBarButtonItemAction?
     private var onTextViewDidChangeAction: ((InputBarButtonItem, InputTextView) -> Void)?
@@ -144,13 +145,14 @@ open class InputBarButtonItem: UIButton {
         contentVerticalAlignment = .center
         contentHorizontalAlignment = .center
         imageView?.contentMode = .scaleAspectFit
-        setContentHuggingPriority(500, for: .horizontal)
-        setContentHuggingPriority(500, for: .vertical)
+      setContentHuggingPriority(UILayoutPriority(rawValue: 500), for: .horizontal)
+      setContentHuggingPriority(UILayoutPriority(rawValue: 500), for: .vertical)
         setTitleColor(UIColor(red: 0, green: 122/255, blue: 1, alpha: 1), for: .normal)
         setTitleColor(UIColor(red: 0, green: 122/255, blue: 1, alpha: 0.3), for: .highlighted)
         setTitleColor(.lightGray, for: .disabled)
         adjustsImageWhenHighlighted = false
         addTarget(self, action: #selector(InputBarButtonItem.touchUpInsideAction), for: .touchUpInside)
+        addTarget(self, action: #selector(InputBarButtonItem.touchDownInsideAction), for: .touchDown)
     }
     
     // MARK: - Size Adjustment
@@ -195,6 +197,12 @@ open class InputBarButtonItem: UIButton {
         onTouchUpInsideAction = action
         return self
     }
+
+    @discardableResult
+    open func onTouchDownInside(_ action: @escaping InputBarButtonItemAction) -> Self {
+        onTouchDownInsideAction = action
+        return self
+    }
     
     @discardableResult
     open func onSelected(_ action: @escaping InputBarButtonItemAction) -> Self {
@@ -234,8 +242,12 @@ open class InputBarButtonItem: UIButton {
         onKeyboardEditingBeginsAction?(self)
     }
     
-    public func touchUpInsideAction() {
+  @objc public func touchUpInsideAction() {
         onTouchUpInsideAction?(self)
+    }
+    
+    public func touchDownInsideAction() {
+       onTouchDownInsideAction?(self)
     }
     
     // MARK: - Static

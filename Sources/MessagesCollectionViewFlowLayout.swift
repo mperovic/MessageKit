@@ -23,6 +23,7 @@
  */
 
 import UIKit
+import AVFoundation
 
 open class MessagesCollectionViewFlowLayout: UICollectionViewFlowLayout {
 
@@ -69,8 +70,8 @@ open class MessagesCollectionViewFlowLayout: UICollectionViewFlowLayout {
     // MARK: - Initializers
 
     override public init() {
-
-        messageLabelFont = UIFont.preferredFont(forTextStyle: .body)
+		
+        messageLabelFont = UIFont.defaultMessageLabelFont()
         messageLabelInsets = UIEdgeInsets(top: 7, left: 14, bottom: 7, right: 14)
         messageToViewEdgePadding = 30.0
 
@@ -201,9 +202,9 @@ extension MessagesCollectionViewFlowLayout {
 
         switch attributes.avatarHorizontalAlignment {
         case .cellLeading:
-            origin.x = 0
+            origin.x = 15
         case .cellTrailing:
-            origin.x = contentWidth - avatarWidth
+            origin.x = contentWidth - avatarWidth - 15
         }
 
         let contentHeight = attributes.frame.height
@@ -292,12 +293,25 @@ extension MessagesCollectionViewFlowLayout {
         switch message.data {
         case .text(let text):
             messageContainerSize = labelSize(for: text, considering: maxWidth, and: messageLabelFont)
+            messageContainerSize.width += messageHorizontalInsets
+            messageContainerSize.height += messageVerticalInsets
         case .attributedText(let text):
             messageContainerSize = labelSize(for: text, considering: maxWidth)
+            messageContainerSize.width += messageHorizontalInsets
+            messageContainerSize.height += messageVerticalInsets
+        case .photo, .video:
+            guard let messagesCollectionView = messagesCollectionView else { return .zero }
+            guard let layoutDelegate = messagesCollectionView.messagesLayoutDelegate as? MediaMessageLayoutDelegate else { return .zero }
+            let width = layoutDelegate.widthForMedia(message: message, at: indexPath, with: maxWidth, in: messagesCollectionView)
+            let height = layoutDelegate.heightForMedia(message: message, at: indexPath, with: maxWidth, in: messagesCollectionView)
+            messageContainerSize = CGSize(width: width, height: height)
+        case .location:
+            guard let messagesCollectionView = messagesCollectionView else { return .zero }
+            guard let layoutDelegate = messagesCollectionView.messagesLayoutDelegate as? LocationMessageLayoutDelegate else { return .zero }
+            let width = layoutDelegate.widthForLocation(message: message, at: indexPath, with: maxWidth, in: messagesCollectionView)
+            let height = layoutDelegate.heightForLocation(message: message, at: indexPath, with: maxWidth, in: messagesCollectionView)
+            messageContainerSize = CGSize(width: width, height: height)
         }
-
-        messageContainerSize.width += messageHorizontalInsets
-        messageContainerSize.height += messageVerticalInsets
 
         return messageContainerSize
     }
@@ -412,11 +426,11 @@ extension MessagesCollectionViewFlowLayout {
         case (.cellTrailing, _):
             origin.x = attributes.frame.width - attributes.cellTopLabelFrame.width
         case (.messageLeading, .cellLeading):
-            origin.x = attributes.avatarFrame.width + avatarMessagePadding
+            origin.x = attributes.avatarFrame.width + avatarMessagePadding + 15
         case (.messageLeading, .cellTrailing):
             origin.x = attributes.frame.width - attributes.avatarFrame.width - avatarMessagePadding - attributes.messageContainerFrame.width
         case (.messageTrailing, .cellTrailing):
-            origin.x = attributes.frame.width - attributes.avatarFrame.width - avatarMessagePadding - attributes.cellTopLabelFrame.width
+            origin.x = attributes.frame.width - attributes.avatarFrame.width - avatarMessagePadding - attributes.cellTopLabelFrame.width - 15
         case (.messageTrailing, .cellLeading):
             origin.x = attributes.frame.width - messageToViewEdgePadding - attributes.cellTopLabelFrame.width
         }

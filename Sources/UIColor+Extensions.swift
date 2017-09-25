@@ -26,12 +26,16 @@ import Foundation
 
 extension UIColor {
 
-    static let incomingGray = UIColor(colorLiteralRed: 230/255, green: 230/255, blue: 235/255, alpha: 1.0)
+    static let incomingGray = UIColor(red: 230/255, green: 230/255, blue: 235/255, alpha: 1.0)
 
-    static let outgoingGreen = UIColor(colorLiteralRed: 69/255, green: 214/255, blue: 93/255, alpha: 1.0)
+    static let outgoingGreen = UIColor(red: 69/255, green: 214/255, blue: 93/255, alpha: 1.0)
 
-    static let inputBarGray = UIColor(colorLiteralRed: 247/255, green: 247/255, blue: 247/255, alpha: 1.0)
+    static let inputBarGray = UIColor(red: 247/255, green: 247/255, blue: 247/255, alpha: 1.0)
+
+    static let playButtonLightGray = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1.0)
 
     static let sendButtonBlue = UIColor(colorLiteralRed: 15/255, green: 135/255, blue: 255/255, alpha: 1.0)
+    
+    static let chatBackgroundColor = UIColor(red: 54/255, green: 60/255, blue: 64/255, alpha: 1)
 
 }

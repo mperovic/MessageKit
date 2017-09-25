@@ -47,7 +47,7 @@ open class MessageInputBar: UIView {
     open var isTranslucent: Bool = false {
         didSet {
             blurView.isHidden = !isTranslucent
-            backgroundColor = isTranslucent ? .clear : .white
+            backgroundColor = UIColor(red: 94/255, green: 103/255, blue: 109/255, alpha: 1)
         }
     }
     
@@ -118,6 +118,35 @@ open class MessageInputBar: UIView {
         }
     }()
     
+    open var sendButtonImage: InputBarButtonItem = {
+        return InputBarButtonItem().configure {
+            $0.setSize(CGSize(width: 26, height: 26), animated: false)
+            $0.image = #imageLiteral(resourceName: "ic_send")
+            $0.isHidden = true
+            }.onTouchUpInside {
+                $0.messageInputBar?.didSelectSendButton()
+        }
+    }()
+    
+    open var sendMediaButton: InputBarButtonItem = {
+        return InputBarButtonItem().configure {
+            $0.setSize(CGSize(width: 19.2, height: 21), animated: false)
+            $0.image = #imageLiteral(resourceName: "paperclip")
+            }.onTouchUpInside {
+                $0.messageInputBar?.didSelectMediaButton()
+        }
+    }()
+
+    open var sendAudioButton: InputBarButtonItem = {
+        return InputBarButtonItem().configure {
+            $0.image = #imageLiteral(resourceName: "voiceRecording")
+            }.onTouchDownInside {
+                $0.messageInputBar?.didSelectAudioButton()
+            }.onTouchUpInside {
+                $0.messageInputBar?.didLeaveAudioButton()
+        }
+    }()
+    
     /// The anchor contants used by the UIStackViews and InputTextView to create padding within the InputBarAccessoryView
     open var padding: UIEdgeInsets = UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 12) {
         didSet {
@@ -156,7 +185,7 @@ open class MessageInputBar: UIView {
     }
     
     /// The fixed widthAnchor constant of the leftStackView
-    private(set) var leftStackViewWidthContant: CGFloat = 0 {
+    private(set) var leftStackViewWidthContant: CGFloat = 52 {
         didSet {
             leftStackViewLayoutSet?.width?.constant = leftStackViewWidthContant
         }
@@ -218,7 +247,7 @@ open class MessageInputBar: UIView {
     
     open func setup() {
         
-        backgroundColor = .inputBarGray
+        backgroundColor =  UIColor(red: 94/255, green: 103/255, blue: 109/255, alpha: 1)
         autoresizingMask = [.flexibleHeight]
         setupSubviews()
         setupConstraints()
@@ -233,7 +262,8 @@ open class MessageInputBar: UIView {
         addSubview(rightStackView)
         addSubview(bottomStackView)
         addSubview(separatorLine)
-        setStackViewItems([sendButton], forStack: .right, animated: false)
+        setStackViewItems([sendButtonImage, sendAudioButton], forStack: .right, animated: false)
+        setStackViewItems([sendMediaButton], forStack: .left, animated: false)
     }
     
     private func setupConstraints() {
@@ -250,14 +280,14 @@ open class MessageInputBar: UIView {
         
         leftStackViewLayoutSet = NSLayoutConstraintSet(
             top:    inputTextView.topAnchor.constraint(equalTo: topAnchor, constant: padding.top),
-            bottom: leftStackView.bottomAnchor.constraint(equalTo: inputTextView.bottomAnchor, constant: 0),
+            bottom: leftStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -11),
             left:   leftStackView.leftAnchor.constraint(equalTo: leftAnchor, constant: padding.left),
             width:  leftStackView.widthAnchor.constraint(equalToConstant: leftStackViewWidthContant)
             ).activate()
         
         rightStackViewLayoutSet = NSLayoutConstraintSet(
             top:    inputTextView.topAnchor.constraint(equalTo: topAnchor, constant: padding.top),
-            bottom: rightStackView.bottomAnchor.constraint(equalTo: inputTextView.bottomAnchor, constant: 0),
+            bottom: rightStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -9),
             right:  rightStackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -padding.right),
             width:  rightStackView.widthAnchor.constraint(equalToConstant: rightStackViewWidthContant)
             ).activate()
@@ -268,6 +298,8 @@ open class MessageInputBar: UIView {
             left:   bottomStackView.leftAnchor.constraint(equalTo: leftAnchor, constant: padding.left),
             right:  bottomStackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -padding.right)
             ).activate()
+        
+        self.heightAnchor.constraint(equalToConstant: 44)
     }
     
     private func updateViewContraints() {
@@ -396,7 +428,7 @@ open class MessageInputBar: UIView {
     /// - Parameters:
     ///   - newValue: New widthAnchor constant
     ///   - animated: If the layout should be animated
-    open func setLeftStackViewWidthContant(to newValue: CGFloat, animated: Bool) {
+    open func setLeftStackViewWidthConstant(to newValue: CGFloat, animated: Bool) {
         performLayout(animated) {
             self.leftStackViewWidthContant = newValue
             self.layoutStackViews([.left])
@@ -409,7 +441,7 @@ open class MessageInputBar: UIView {
     /// - Parameters:
     ///   - newValue: New widthAnchor constant
     ///   - animated: If the layout should be animated
-    open func setRightStackViewWidthContant(to newValue: CGFloat, animated: Bool) {
+    open func setRightStackViewWidthConstant(to newValue: CGFloat, animated: Bool) {
         performLayout(animated) {
             self.rightStackViewWidthContant = newValue
             self.layoutStackViews([.right])
@@ -419,14 +451,16 @@ open class MessageInputBar: UIView {
     
     // MARK: - Notifications/Hooks
     
-    open func orientationDidChange() {
+  @objc open func orientationDidChange() {
         invalidateIntrinsicContentSize()
     }
     
-    open func textViewDidChange() {
+  @objc open func textViewDidChange() {
         let trimmedText = inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        sendButton.isEnabled = !trimmedText.isEmpty
+        // sendButton.isEnabled = !trimmedText.isEmpty
+        sendButtonImage.isHidden = trimmedText.isEmpty
+        sendAudioButton.isHidden = !sendButtonImage.isHidden
         inputTextView.placeholderLabel.isHidden = !inputTextView.text.isEmpty
 
         items.forEach { $0.textViewDidChangeAction(with: inputTextView) }
@@ -435,11 +469,11 @@ open class MessageInputBar: UIView {
         invalidateIntrinsicContentSize()
     }
     
-    open func textViewDidBeginEditing() {
+  @objc open func textViewDidBeginEditing() {
         self.items.forEach { $0.keyboardEditingBeginsAction() }
     }
     
-    open func textViewDidEndEditing() {
+  @objc open func textViewDidEndEditing() {
         self.items.forEach { $0.keyboardEditingEndsAction() }
     }
     
@@ -448,6 +482,18 @@ open class MessageInputBar: UIView {
     open func didSelectSendButton() {
         delegate?.messageInputBar(self, didPressSendButtonWith: inputTextView.text)
         textViewDidChange()
+    }
+    
+    open func didSelectMediaButton() {
+        delegate?.messageInputBar(didPressSendMediaButton: self)
+    }
+    
+    open func didSelectAudioButton() {
+        print("DidSelectAudioButton")
+    }
+    
+    open func didLeaveAudioButton() {
+        print("DidLeaveAudioButton")
     }
 }
 

@@ -23,23 +23,20 @@
  */
 
 import Foundation
-//import class CoreLocation.CLLocation
+import class CoreLocation.CLLocation
 
 public enum MessageData {
 
     case text(String)
     case attributedText(NSAttributedString)
+    case photo(UIImage)
+    case video(file: URL, thumbnail: UIImage)
+    case location(CLLocation)
 
     // MARK: - Not supported yet
 
 //    case audio(Data)
-//    
-//    case location(CLLocation)
-//    
-//    case photo(UIImage)
-//    
-//    case video(file: NSURL, thumbnail: UIImage)
-//    
+//
 //    case system(String)
 //    
 //    case custom(Any)

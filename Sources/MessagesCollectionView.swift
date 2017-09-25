@@ -50,7 +50,7 @@ open class MessagesCollectionView: UICollectionView {
 
     override public init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
-        backgroundColor = .white
+        backgroundColor = UIColor.chatBackgroundColor
     }
     
     required public init?(coder aDecoder: NSCoder) {
