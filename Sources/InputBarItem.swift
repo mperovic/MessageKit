@@ -152,6 +152,7 @@ open class InputBarButtonItem: UIButton {
         setTitleColor(.lightGray, for: .disabled)
         adjustsImageWhenHighlighted = false
         addTarget(self, action: #selector(InputBarButtonItem.touchUpInsideAction), for: .touchUpInside)
+        addTarget(self, action: #selector(InputBarButtonItem.touchDownInsideAction), for: .touchDown)
     }
     
     // MARK: - Size Adjustment
@@ -245,7 +246,7 @@ open class InputBarButtonItem: UIButton {
         onTouchUpInsideAction?(self)
     }
     
-    public func touchDownInsideAction() {
+	@objc public func touchDownInsideAction() {
        onTouchDownInsideAction?(self)
     }
     
