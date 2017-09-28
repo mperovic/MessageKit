@@ -34,7 +34,7 @@ extension UIColor {
 
     static let playButtonLightGray = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1.0)
 
-    static let sendButtonBlue = UIColor(colorLiteralRed: 15/255, green: 135/255, blue: 255/255, alpha: 1.0)
+    static let sendButtonBlue = UIColor(red: 15/255, green: 135/255, blue: 255/255, alpha: 1.0)
     
     static let chatBackgroundColor = UIColor(red: 54/255, green: 60/255, blue: 64/255, alpha: 1)
 

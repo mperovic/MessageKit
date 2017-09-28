@@ -246,7 +246,7 @@ open class InputBarButtonItem: UIButton {
         onTouchUpInsideAction?(self)
     }
     
-    public func touchDownInsideAction() {
+	@objc public func touchDownInsideAction() {
        onTouchDownInsideAction?(self)
     }
     
