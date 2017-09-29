@@ -109,6 +109,9 @@ open class MessagesViewController: UIViewController {
         messagesCollectionView.register(LocationMessageCell.self,
                                         forCellWithReuseIdentifier: "LocationMessageCell")
 
+		messagesCollectionView.register(AudioMessageCell.self,
+		                                forCellWithReuseIdentifier: "AudioMessageCell")
+
         messagesCollectionView.register(MessageFooterView.self,
                                         forSupplementaryViewOfKind: UICollectionElementKindSectionFooter,
                                         withReuseIdentifier: "MessageFooterView")
@@ -211,6 +214,12 @@ extension MessagesViewController: UICollectionViewDataSource {
             }
             cell.configure(with: message, at: indexPath, and: messagesCollectionView)
             return cell
+		case .audio:
+			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AudioMessageCell", for: indexPath) as? AudioMessageCell else {
+				fatalError("Unable to dequeue AudioMessageCell")
+			}
+			cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+			return cell
         }
 
     }

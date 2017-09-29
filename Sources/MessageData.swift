@@ -24,6 +24,7 @@
 
 import Foundation
 import class CoreLocation.CLLocation
+import class AVFoundation.AVAsset
 
 public enum MessageData {
 
@@ -32,10 +33,9 @@ public enum MessageData {
     case photo(UIImage)
     case video(file: URL, thumbnail: UIImage)
     case location(CLLocation)
+	case audio(AVAsset)
 
     // MARK: - Not supported yet
-
-//    case audio(Data)
 //
 //    case system(String)
 //    

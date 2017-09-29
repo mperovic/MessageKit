@@ -311,6 +311,12 @@ extension MessagesCollectionViewFlowLayout {
             let width = layoutDelegate.widthForLocation(message: message, at: indexPath, with: maxWidth, in: messagesCollectionView)
             let height = layoutDelegate.heightForLocation(message: message, at: indexPath, with: maxWidth, in: messagesCollectionView)
             messageContainerSize = CGSize(width: width, height: height)
+		case .audio:
+			guard let messagesCollectionView = messagesCollectionView else { return .zero }
+			guard let layoutDelegate = messagesCollectionView.messagesLayoutDelegate as? AudioMessageLayoutDelegate else { return .zero }
+			let width = layoutDelegate.widthForAudio(message: message, at: indexPath, with: maxWidth, in: messagesCollectionView)
+			let height = layoutDelegate.heightForAudio(message: message, at: indexPath, with: maxWidth, in: messagesCollectionView)
+			messageContainerSize = CGSize(width: width, height: height)
         }
 
         return messageContainerSize
