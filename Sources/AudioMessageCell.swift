@@ -31,16 +31,20 @@ open class AudioMessageCell: MessageCollectionViewCell<AudioMessageView> {
 		super.setupSubviews()
 	}
 
+	open func configure(with message: MessageType, at indexPath: IndexPath, audioPlayer: AudioPlayer, and messagesCollectionView: MessagesCollectionView) {
+		messageContentView.audioPlayer = audioPlayer
 
-	override open func configure(with message: MessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
+		self.configure(with: message, at: indexPath, and: messagesCollectionView)
+	}
+
+	open override func configure(with message: MessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
 		super.configure(with: message, at: indexPath, and: messagesCollectionView)
 
 		switch message.data {
 		case .audio(let audioData):
-			break
+			messageContentView.avAsset = audioData
 		default:
 			break
 		}
 	}
-
 }
