@@ -25,6 +25,7 @@
 import Foundation
 import MessageKit
 import CoreLocation
+import AVFoundation
 
 struct MockMessage: MessageType {
 	
@@ -60,5 +61,9 @@ struct MockMessage: MessageType {
     init(location: CLLocation, sender: Sender, messageId: String) {
         self.init(data: .location(location), sender: sender, messageId: messageId)
     }
+
+	init(avAsset: AVAsset, sender: Sender, messageId: String) {
+		self.init(data: .audio(avAsset), sender: sender, messageId: messageId)
+	}
 
 }
