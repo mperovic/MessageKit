@@ -254,6 +254,16 @@ extension ConversationViewController: LocationMessageLayoutDelegate {
 
 }
 
+// MARK: - AudioMessageLayoutDelegate
+
+extension ConversationViewController: AudioMessageLayoutDelegate {
+
+	func heightForAudio(message: MessageType, at indexPath: IndexPath, with maxWidth: CGFloat, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+		return 68
+	}
+
+}
+
 // MARK: - MediaMessageLayoutDelegate
 
 extension ConversationViewController: MediaMessageLayoutDelegate {}

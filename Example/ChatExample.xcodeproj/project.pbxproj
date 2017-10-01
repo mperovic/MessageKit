@@ -21,6 +21,7 @@
 		B096438B1F288D47004D0129 /* MockMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B096438A1F288D47004D0129 /* MockMessage.swift */; };
 		C1DF6DF39F66906000EC76CF /* Pods_ChatExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56F0AC85B38034EC92CCBC7D /* Pods_ChatExampleTests.framework */; };
 		C7CA53A1B85256A5097E7DC7 /* Pods_ChatExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B316705C4717C3B4C916D62 /* Pods_ChatExample.framework */; };
+		DC3D25D21F7E378F00CBD37A /* ringing.m4a in Resources */ = {isa = PBXBuildFile; fileRef = DC3D25CF1F7D2E0000CBD37A /* ringing.m4a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +82,7 @@
 		B0DD3C951C9D064B5E6D6644 /* Pods-ChatExampleUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatExampleUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatExampleUITests/Pods-ChatExampleUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		B2F1C412A96DE613A0AC31F8 /* Pods-ChatExampleUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatExampleUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatExampleUITests/Pods-ChatExampleUITests.release.xcconfig"; sourceTree = "<group>"; };
 		BFE5859D088A740A7D43E1B1 /* Pods-ChatExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatExampleTests/Pods-ChatExampleTests.release.xcconfig"; sourceTree = "<group>"; };
+		DC3D25CF1F7D2E0000CBD37A /* ringing.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = ringing.m4a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +151,7 @@
 		882B5E771CF7D53600B6E160 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				DC3D25CF1F7D2E0000CBD37A /* ringing.m4a */,
 				882B5E781CF7D53600B6E160 /* AppDelegate.swift */,
 				B0655A321F23E90800542A83 /* ConversationViewController.swift */,
 				37D3EAC31F390E5F00DD6A55 /* SampleData.swift */,
@@ -308,6 +311,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC3D25D21F7E378F00CBD37A /* ringing.m4a in Resources */,
 				882B5E841CF7D53600B6E160 /* Main.storyboard in Resources */,
 				882B5E821CF7D53600B6E160 /* Assets.xcassets in Resources */,
 				882B5E831CF7D53600B6E160 /* LaunchScreen.storyboard in Resources */,

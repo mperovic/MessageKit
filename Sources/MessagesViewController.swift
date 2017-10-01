@@ -36,6 +36,10 @@ open class MessagesViewController: UIViewController {
 
     private var isFirstLayout: Bool = true
 
+	lazy open var audioPlayer = {
+		return AudioPlayer()
+	}()
+
     override open var canBecomeFirstResponder: Bool {
         return true
     }
@@ -85,6 +89,10 @@ open class MessagesViewController: UIViewController {
         }
     }
 
+	open override func viewWillDisappear(_ animated: Bool) {
+//		audioPlayer.stop()
+	}
+
     // MARK: - Initializers
 
     deinit {
@@ -108,6 +116,9 @@ open class MessagesViewController: UIViewController {
 
         messagesCollectionView.register(LocationMessageCell.self,
                                         forCellWithReuseIdentifier: "LocationMessageCell")
+
+		messagesCollectionView.register(AudioMessageCell.self,
+		                                forCellWithReuseIdentifier: "AudioMessageCell")
 
         messagesCollectionView.register(MessageFooterView.self,
                                         forSupplementaryViewOfKind: UICollectionElementKindSectionFooter,
@@ -211,6 +222,12 @@ extension MessagesViewController: UICollectionViewDataSource {
             }
             cell.configure(with: message, at: indexPath, and: messagesCollectionView)
             return cell
+		case .audio:
+			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AudioMessageCell", for: indexPath) as? AudioMessageCell else {
+				fatalError("Unable to dequeue AudioMessageCell")
+			}
+			cell.configure(with: message, at: indexPath, audioPlayer: audioPlayer, and: messagesCollectionView)
+			return cell
         }
 
     }
