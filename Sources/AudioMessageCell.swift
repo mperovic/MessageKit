@@ -27,20 +27,33 @@ import AVFoundation
 
 open class AudioMessageCell: MessageCollectionViewCell<AudioMessageView> {
 
+	open override func prepareForReuse() {
+		super.prepareForReuse()
+
+		messageContentView.playerProgressSlider.value = 0.0
+		messageContentView.timeLabel.text = "--:--"
+		messageContentView.audioPlayer?.delegate = nil
+	}
+
 	override func setupSubviews() {
 		super.setupSubviews()
 	}
 
+	open func configure(with message: MessageType, at indexPath: IndexPath, audioPlayer: AudioPlayer, and messagesCollectionView: MessagesCollectionView) {
+		messageContentView.audioPlayer = audioPlayer
 
-	override open func configure(with message: MessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
+		self.configure(with: message, at: indexPath, and: messagesCollectionView)
+	}
+
+	open override func configure(with message: MessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
 		super.configure(with: message, at: indexPath, and: messagesCollectionView)
 
 		switch message.data {
-		case .audio(let audioData):
-			break
+		case .audio(let audioUrl):
+			messageContentView.audioURL = audioUrl
 		default:
 			break
 		}
 	}
-
 }
+
