@@ -227,6 +227,9 @@ open class AudioMessageView: UIView, AudioPlayerDelegate {
 		if audioPlayer?.delegate == nil {
 			setViewAsAudioDelegate()
 		}
+		if let audioDelegate = audioPlayer?.delegate, let audioView = audioDelegate as? AudioMessageView, audioView != self {
+			setViewAsAudioDelegate()
+		}
 		if audioPlayer?.state == .playing {
 			audioPlayer?.pause()
 		} else {
