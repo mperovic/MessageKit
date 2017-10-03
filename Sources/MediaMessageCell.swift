@@ -30,7 +30,7 @@ open class MediaMessageCell: MessageCollectionViewCell<UIImageView> {
 
     open lazy var playButtonView: PlayButtonView = {
         let playButtonView = PlayButtonView()
-        playButtonView.frame.size = CGSize(width: 35, height: 35)
+        playButtonView.frame.size = CGSize(width: 42, height: 42)
         return playButtonView
     }()
 
@@ -39,8 +39,8 @@ open class MediaMessageCell: MessageCollectionViewCell<UIImageView> {
     private func setupConstraints() {
         playButtonView.translatesAutoresizingMaskIntoConstraints = false
 
-        let centerX = playButtonView.centerXAnchor.constraint(equalTo: centerXAnchor)
-        let centerY = playButtonView.centerYAnchor.constraint(equalTo: centerYAnchor)
+        let centerX = playButtonView.centerXAnchor.constraint(equalTo: messageContentView.centerXAnchor)
+        let centerY = playButtonView.centerYAnchor.constraint(equalTo: messageContentView.centerYAnchor)
         let width = playButtonView.widthAnchor.constraint(equalToConstant: playButtonView.bounds.width)
         let height = playButtonView.heightAnchor.constraint(equalToConstant: playButtonView.bounds.height)
 
