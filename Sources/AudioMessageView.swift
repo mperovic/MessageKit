@@ -35,17 +35,19 @@ open class AudioMessageView: UIView, AudioPlayerDelegate {
 
 	// Properties
 
-	private let buttonSize = CGSize(width: 35, height: 35)
+	private let buttonSize = CGSize(width: 42, height: 42)
 
 	open lazy var playButtonView: PlayButtonView = {
 		let playButtonView = PlayButtonView()
 		playButtonView.frame.size = buttonSize
+		playButtonView.isUserInteractionEnabled = false
 		return playButtonView
 	}()
 
 	open lazy var pauseButtonView: PauseButtonView = {
 		let pauseButtonView = PauseButtonView()
 		pauseButtonView.frame.size = buttonSize
+		pauseButtonView.isUserInteractionEnabled = false
 		return pauseButtonView
 	}()
 
@@ -54,6 +56,28 @@ open class AudioMessageView: UIView, AudioPlayerDelegate {
 		buttonView.frame.size = buttonSize
 		return buttonView
 	}()
+
+	open var audioURL: URL? {
+		didSet {
+			if let anUrl = audioURL {
+				downloadFile(atUrl: anUrl) { [weak self] (localUrl) in
+					self?.localUrl = localUrl
+				}
+			} else {
+				self.localUrl = nil
+			}
+		}
+	}
+	private var localUrl: URL? {
+		didSet {
+			if let url = localUrl {
+				avAsset = AVAsset(url: url)
+			} else {
+				avAsset = nil
+			}
+			self.currentTime = CMTimeMakeWithSeconds(0, 1)
+		}
+	}
 
 	open weak var audioPlayer: AudioPlayer?
 	open var avAsset: AVAsset?
@@ -64,6 +88,7 @@ open class AudioMessageView: UIView, AudioPlayerDelegate {
 	private var radius: CGFloat?
 
 	var playerProgressSlider = AudioSlider(frame: CGRect(x: 64.0, y: 24.0, width: 206.0, height: 20.0))
+	var timeLabel = UILabel(frame: CGRect(x: 64.0, y: 47.0, width: 206.0, height: 21.0))
 
 	var progressWidth: CGFloat!
 	var progressHeight: CGFloat {
@@ -97,14 +122,6 @@ open class AudioMessageView: UIView, AudioPlayerDelegate {
 	}
 
 	var positionViewLeading: NSLayoutConstraint?
-
-	private lazy var playButtonImage: UIImage = {
-		return UIImage(named: "play")!
-	}()
-
-	private lazy var pauseButtonImage: UIImage = {
-		return UIImage(named: "pause")!
-	}()
 
 
 	// MARK: - Initializers
@@ -143,6 +160,12 @@ open class AudioMessageView: UIView, AudioPlayerDelegate {
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.buttonAction(_:)))
 		buttonContainerView.addGestureRecognizer(tapGesture)
 
+		timeLabel.translatesAutoresizingMaskIntoConstraints = false
+		timeLabel.textColor = .white
+		timeLabel.text = "--:--"
+		timeLabel.font = UIFont.systemFont(ofSize: 12)
+		addSubview(timeLabel)
+
 		setupConstraints()
 
 		setCorner(radius: nil)
@@ -156,10 +179,10 @@ open class AudioMessageView: UIView, AudioPlayerDelegate {
 			guard let `self` = self else { return }
 
 			// buttonContainer
-			let buttonContainerWidth = self.buttonContainerView.widthAnchor.constraint(equalToConstant: 35.0)
-			let buttonContainerHeight = self.buttonContainerView.heightAnchor.constraint(equalToConstant: 35.0)
+			let buttonContainerWidth = self.buttonContainerView.widthAnchor.constraint(equalToConstant: 42.0)
+			let buttonContainerHeight = self.buttonContainerView.heightAnchor.constraint(equalToConstant: 42.0)
 			let buttonContainerCenterY = self.buttonContainerView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
-			let buttonContainerLeading = self.buttonContainerView.leadingAnchor.constraint(equalTo: margins.leadingAnchor, constant: 13.0)
+			let buttonContainerLeading = self.buttonContainerView.leadingAnchor.constraint(equalTo: margins.leadingAnchor, constant: 6.0)
 			NSLayoutConstraint.activate([buttonContainerWidth, buttonContainerHeight, buttonContainerCenterY, buttonContainerLeading])
 
 			// playerProgressSlider
@@ -168,6 +191,13 @@ open class AudioMessageView: UIView, AudioPlayerDelegate {
 			let playerProgressSliderCenterY = self.playerProgressSlider.centerYAnchor.constraint(equalTo: self.centerYAnchor)
 			let playerProgressSliderHeight = self.playerProgressSlider.heightAnchor.constraint(equalToConstant: 20.0)
 			NSLayoutConstraint.activate([playerProgressSliderCenterY, playerProgressSliderHeight, playerProgressSliderLeading, playerProgressSliderTrailing])
+
+			// timeLabel
+			let timeLabelLeading = self.timeLabel.leadingAnchor.constraint(equalTo: self.playerProgressSlider.leadingAnchor, constant: 0.0)
+			let timeLabelY = self.timeLabel.topAnchor.constraint(equalTo: self.playerProgressSlider.bottomAnchor, constant: 3.0)
+			NSLayoutConstraint.activate([timeLabelLeading, timeLabelY])
+
+			self.updateConstraintsIfNeeded()
 		}
 
 	}
@@ -192,9 +222,9 @@ open class AudioMessageView: UIView, AudioPlayerDelegate {
 	}
 
 	@objc private func buttonAction(_ sender: UITapGestureRecognizer) {
+		guard avAsset != nil else { return }
+
 		if audioPlayer?.delegate == nil {
-			setViewAsAudioDelegate()
-		} else if let audioDelegate = audioPlayer?.delegate, audioDelegate as! AudioMessageView != self {
 			setViewAsAudioDelegate()
 		}
 		if audioPlayer?.state == .playing {
@@ -289,6 +319,7 @@ class AudioSlider: UISlider {
 }
 
 extension AudioMessageView: Comparable {
+
 	public static func <(lhs: AudioMessageView, rhs: AudioMessageView) -> Bool {
 		return true
 	}
@@ -297,4 +328,52 @@ extension AudioMessageView: Comparable {
 		return lhs.avAsset == rhs.avAsset
 	}
 
+}
+
+extension AudioMessageView {
+	func downloadFile(atUrl audioUrl: URL, completion: @escaping (URL?) -> ()) {
+		// create your document folder url
+		let documentsUrl = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+		// your destination file url
+		var destinationUrl: URL?
+		if let queryItems = URLComponents(url: audioUrl, resolvingAgainstBaseURL: true)?.queryItems {
+			for queryItem in queryItems {
+				if queryItem.name == "fileid" {
+					if let field = queryItem.value {
+						destinationUrl = documentsUrl.appendingPathComponent("\(queryItem.name)\(field).m4a")
+					}
+				}
+			}
+		}
+		if let destination = destinationUrl {
+			print(destination)
+			// check if it exists before downloading it
+			if FileManager().fileExists(atPath: destination.path) {
+				print("The file already exists at path")
+				completion(destination)
+			} else {
+				//  if the file doesn't exist
+				//  just download the data from your url
+				URLSession.shared.downloadTask(with: audioUrl, completionHandler: { (location, response, error) in
+					// after downloading your data you need to save it to your destination url
+					guard
+						let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
+						let mimeType = response?.mimeType, mimeType.hasPrefix("audio"),
+						let location = location, error == nil
+						else {
+							completion(nil)
+							return
+					}
+					do {
+						try FileManager.default.moveItem(at: location, to: destination)
+						completion(destination)
+						print("file saved")
+					} catch {
+						completion(nil)
+						print(error)
+					}
+				}).resume()
+			}
+		}
+	}
 }

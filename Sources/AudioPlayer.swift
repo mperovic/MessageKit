@@ -17,6 +17,9 @@ public enum PlayerState {
 
 @objc protocol AudioPlayerDelegate: class {
 
+	// Time Label
+	var timeLabel: UILabel { get set }
+
 	// Playing progress slider
 	var playerProgressSlider: AudioSlider { get set }
 
@@ -147,7 +150,7 @@ open class AudioPlayer: NSObject {
 
 		// start the timer
 		timer = Timer.scheduledTimer(
-			timeInterval: 0.5,
+			timeInterval: 0.25,
 			target: self,
 			selector: #selector(timerAction),
 			userInfo: nil,
@@ -161,7 +164,7 @@ open class AudioPlayer: NSObject {
 	}
 
 	@objc func timerAction() {
-//		self.timeLabel.text = CMTimeMakeWithSeconds(CMTimeGetSeconds(self.audioPlayer.currentItem!.asset.duration) - CMTimeGetSeconds(self.audioPlayer.currentTime()), 1).durationText
+		delegate?.timeLabel.text = CMTimeMakeWithSeconds(CMTimeGetSeconds(currentItem!.asset.duration) - CMTimeGetSeconds(avPlayer.currentTime()), 1).durationText
 		let rate = Float(CMTimeGetSeconds(avPlayer.currentTime())/CMTimeGetSeconds(avPlayer.currentItem!.asset.duration))
 
 		delegate?.playerProgressSlider.setValue(rate, animated: false)

@@ -65,8 +65,8 @@ open class PlayButtonView: UIView {
         applyTriangleMask()
 
         triangleView.clipsToBounds = true
-        triangleView.backgroundColor = .black
-        backgroundColor = .playButtonLightGray
+        triangleView.backgroundColor = .white
+        backgroundColor = .clear
     }
 
     required public init?(coder aDecoder: NSCoder) {
