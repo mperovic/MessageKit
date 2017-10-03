@@ -53,21 +53,21 @@ open class PauseButtonView: UIView {
 
 	override open func draw(_ rect: CGRect) {
 		//// Color Declarations
-//		let color = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+		let color = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
 
 		//// Oval Drawing
 		let ovalPath = UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: rect.width, height: rect.height))
-		UIColor.clear.setFill()
+		UIColor.playButtonLightGray.setFill()
 		ovalPath.fill()
 
 		//// Rectangle 1 Drawing
 		let rectangle1Path = UIBezierPath(roundedRect: CGRect(x: ceil(rect.width * 0.2286), y: ceil(rect.width * 0.1714), width: ceil(rect.width * 0.1714), height: ceil(rect.width * 0.6571)), cornerRadius: cornerRadius)
-		UIColor.white.setFill()
+		color.setFill()
 		rectangle1Path.fill()
 
 		//// Rectangle 2 Drawing
 		let rectangle2Path = UIBezierPath(roundedRect: CGRect(x: ceil(rect.width * 0.600), y: ceil(rect.width * 0.1714), width: ceil(rect.width * 0.1714), height: ceil(rect.width * 0.6571)), cornerRadius: cornerRadius)
-		UIColor.white.setFill()
+		color.setFill()
 		rectangle2Path.fill()
 	}
 
