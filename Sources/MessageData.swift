@@ -33,7 +33,7 @@ public enum MessageData {
     case photo(UIImage)
     case video(file: URL, thumbnail: UIImage)
     case location(CLLocation)
-	case audio(AVAsset)
+	case audio(URL)
 
     // MARK: - Not supported yet
 //
