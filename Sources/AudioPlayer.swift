@@ -61,13 +61,28 @@ open class AudioPlayer: NSObject {
 
 	private var avPlayer = AVPlayer() {
 		didSet {
-			avPlayer.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions.new, context: nil)
+			avPlayer.addObserver(
+				self,
+				forKeyPath: "rate",
+				options: NSKeyValueObservingOptions.new,
+				context: nil
+			)
+			NotificationCenter.default.addObserver(
+				self,
+				selector:#selector(self.playerDidFinishPlaying(note:)),
+				name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
+				object: avPlayer.currentItem
+			)
 		}
 	}
 
 	var timer = Timer()
 
 	// Methods
+
+	@objc func playerDidFinishPlaying(note: NSNotification) {
+		delegate?.playerProgressSlider.value = 0.0
+	}
 
 	open func configureAudioWith(avAsset: AVAsset?) {
 		if avPlayer.currentItem != nil, let audioDelegate = self.delegate {
