@@ -59,12 +59,13 @@ open class MessagesViewController: UIViewController {
 
         automaticallyAdjustsScrollViewInsets = false
         view.backgroundColor = .white
-        messagesCollectionView.keyboardDismissMode = .interactive
+        messagesCollectionView.keyboardDismissMode = .onDrag
 
         setupSubviews()
         setupConstraints()
         registerReusableViews()
         setupDelegates()
+		hideKeyboardWhenTappedAround()
 
     }
 
@@ -300,4 +301,16 @@ extension MessagesViewController {
         
     }
     
+}
+
+extension MessagesViewController {
+	fileprivate func hideKeyboardWhenTappedAround() {
+		let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
+		tap.cancelsTouchesInView = false
+		view.addGestureRecognizer(tap)
+	}
+
+	@objc fileprivate func dismissKeyboard() {
+		messageInputBar.inputTextView.resignFirstResponder()
+	}
 }
