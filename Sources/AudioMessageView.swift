@@ -349,10 +349,8 @@ extension AudioMessageView {
 			}
 		}
 		if let destination = destinationUrl {
-			print(destination)
 			// check if it exists before downloading it
 			if FileManager().fileExists(atPath: destination.path) {
-				print("The file already exists at path")
 				completion(destination)
 			} else {
 				//  if the file doesn't exist
@@ -370,10 +368,8 @@ extension AudioMessageView {
 					do {
 						try FileManager.default.moveItem(at: location, to: destination)
 						completion(destination)
-						print("file saved")
 					} catch {
 						completion(nil)
-						print(error)
 					}
 				}).resume()
 			}
