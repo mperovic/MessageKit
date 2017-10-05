@@ -44,23 +44,26 @@ public enum PlayerState {
 
 }
 
+let stopPlayingAudio = "io.summa.messenger.stopplayingaudio"
+
 open class AudioPlayer: NSObject {
 
 	// Properties
 
-	var delegate : AudioPlayerDelegate?
+	weak var delegate : AudioPlayerDelegate?
 
 	private var currentTime = kCMTimeZero
 
 	open var state: PlayerState = .unknown
 
-	// when the playing message is onscreen, holds the reference to it. nil if playing message is offscreen.
-	private var activeCell: AudioMessageCell?
-
-	private var activeMessageUUID: String?
-
 	private var avPlayer = AVPlayer() {
 		didSet {
+			NotificationCenter.default.addObserver(
+				self,
+				selector: #selector(self.pause),
+				name: NSNotification.Name(rawValue: stopPlayingAudio),
+				object: nil
+			)
 			avPlayer.addObserver(
 				self,
 				forKeyPath: "rate",
@@ -74,6 +77,10 @@ open class AudioPlayer: NSObject {
 				object: avPlayer.currentItem
 			)
 		}
+	}
+
+	deinit {
+		avPlayer.pause()
 	}
 
 	var timer = Timer()
@@ -141,7 +148,7 @@ open class AudioPlayer: NSObject {
 		}
 	}
 
-	open func pause() {
+	@objc open func pause() {
 		avPlayer.pause()
 	}
 
