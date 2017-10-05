@@ -56,6 +56,10 @@ open class MessageCollectionViewCell<ContentView: UIView>: UICollectionViewCell 
         bottomLabel.enabledDetectors = []
         return bottomLabel
     }()
+    
+    open var messageStatusImageView: UIImageView = {
+       return UIImageView()
+    }()
 
     open weak var delegate: MessageCellDelegate?
 
@@ -83,9 +87,13 @@ open class MessageCollectionViewCell<ContentView: UIView>: UICollectionViewCell 
         messageContainerView.addSubview(messageContentView)
         contentView.addSubview(avatarView)
         contentView.addSubview(cellBottomLabel)
+        contentView.addSubview(messageStatusImageView)
 
     }
 
+    let paddingBetweenLabelAndIcon: CGFloat = 4.3
+    let statusIconWidth: CGFloat = 10.0
+    let statusIconHeight: CGFloat = 10.0
     override open func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
         super.apply(layoutAttributes)
 
@@ -101,6 +109,11 @@ open class MessageCollectionViewCell<ContentView: UIView>: UICollectionViewCell 
 
         cellBottomLabel.frame = attributes.cellBottomLabelFrame
         cellBottomLabel.textInsets = attributes.cellBottomLabelInsets
+        
+        let cellBottomLabelFrame = cellBottomLabel.frame
+        let msgStatusImageViewFrame = CGRect(x: cellBottomLabelFrame.origin.x + cellBottomLabel.bounds.width + paddingBetweenLabelAndIcon, y: cellBottomLabelFrame.origin.y, width: statusIconWidth, height: statusIconHeight)
+        messageStatusImageView.frame = msgStatusImageViewFrame
+        messageStatusImageView.center.y = cellBottomLabel.center.y
 
     }
 
@@ -125,6 +138,8 @@ open class MessageCollectionViewCell<ContentView: UIView>: UICollectionViewCell 
 
             messageContainerView.backgroundColor = messageColor
             messageContainerView.style = messageStyle
+            
+            messageStatusImageView.image = getImageByStatus(displayDelegate.messageStatus(message: message, at: indexPath, in: messagesCollectionView))
         }
 
         // Make sure we set all data source properties after configuring display delegate properties
@@ -138,8 +153,19 @@ open class MessageCollectionViewCell<ContentView: UIView>: UICollectionViewCell 
             avatarView.set(avatar: avatar)
             cellTopLabel.attributedText = topLabelText
             cellBottomLabel.attributedText = bottomLabelText
+
         }
 
+    }
+    
+    private func getImageByStatus(_ status: Int?) -> UIImage? {
+        // nil - if i am NOT the sender then don't show image
+        if status == nil { return nil }
+        if status != 2 {
+            return #imageLiteral(resourceName: "deliveryChatIcon")
+        } else {
+            return #imageLiteral(resourceName: "seenChatIcon")
+        }
     }
 
     func setupGestureRecognizers() {

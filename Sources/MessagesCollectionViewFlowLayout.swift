@@ -515,6 +515,11 @@ extension MessagesCollectionViewFlowLayout {
         
     }
 
+    var trailingSpaceBetweenLabelAndCell:CGFloat {
+        get {
+            return 22.3
+        }
+    }
     /// The origin for the cell bottom label.
     fileprivate func cellBottomLabelOrigin(for message: MessageType, and attributes: MessagesCollectionViewLayoutAttributes) -> CGPoint {
 
@@ -538,7 +543,7 @@ extension MessagesCollectionViewFlowLayout {
         case (.messageLeading, .cellTrailing):
             origin.x = attributes.frame.width - attributes.avatarFrame.width - avatarMessagePadding - attributes.messageContainerFrame.width
         case (.messageTrailing, .cellTrailing):
-            origin.x = attributes.frame.width - attributes.avatarFrame.width - avatarMessagePadding - attributes.cellBottomLabelFrame.width
+            origin.x = attributes.frame.width - attributes.avatarFrame.width - avatarMessagePadding - attributes.cellBottomLabelFrame.width - trailingSpaceBetweenLabelAndCell
         case (.messageTrailing, .cellLeading):
             origin.x = attributes.avatarFrame.width + avatarMessagePadding + attributes.messageContainerFrame.width - attributes.cellBottomLabelFrame.width
         }

@@ -39,6 +39,8 @@ public protocol MessagesDisplayDelegate: class {
     func messageFooterView(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageFooterView?
 
     func snapshotOptionsForLocation(message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> LocationMessageSnapshotOptions
+    
+    func messageStatus(message: MessageType, at indexPath: IndexPath, in messageCollectionView: MessagesCollectionView) -> Int?
 
 }
 
@@ -80,6 +82,10 @@ public extension MessagesDisplayDelegate {
 
     func snapshotOptionsForLocation(message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> LocationMessageSnapshotOptions {
         return LocationMessageSnapshotOptions()
+    }
+    
+    func messageStatus(message: MessageType, at indexPath: IndexPath, in messageCollectionView: MessagesCollectionView) -> Int? {
+        return 0
     }
 
 }
