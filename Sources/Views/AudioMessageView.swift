@@ -75,13 +75,13 @@ open class AudioMessageView: UIView, AudioPlayerDelegate {
 			} else {
 				avAsset = nil
 			}
-			self.currentTime = CMTimeMakeWithSeconds(0, 1)
+			self.currentTime = kCMTimeZero
 		}
 	}
 
 	open weak var audioPlayer: AudioPlayer?
 	open var avAsset: AVAsset?
-	private var currentTime: CMTime?
+	open var currentTime: CMTime = kCMTimeZero
 
 	open let audioPlayerBackgroundColor = UIColor(red: 144.0/255.0, green: 224.0/255.0, blue: 149.0/255.0, alpha: 1.0)
 
@@ -233,9 +233,7 @@ open class AudioMessageView: UIView, AudioPlayerDelegate {
 		if audioPlayer?.state == .playing {
 			audioPlayer?.pause()
 		} else {
-			if let currentTime = self.currentTime {
-				audioPlayer?.seek(to: currentTime)
-			}
+			audioPlayer?.seek(to: currentTime)
 			audioPlayer?.play()
 		}
 	}
@@ -249,7 +247,7 @@ open class AudioMessageView: UIView, AudioPlayerDelegate {
 		if let duration = audioPlayer?.currentItem?.asset.duration {
 			let seekTime = CMTimeMakeWithSeconds(Double(sender.value) * CMTimeGetSeconds(duration), 1)
 			audioPlayer?.seek(to: seekTime)
-			currentTime = audioPlayer?.currentItem?.currentTime()
+			currentTime = (audioPlayer?.currentItem?.currentTime())!
 		}
 	}
 

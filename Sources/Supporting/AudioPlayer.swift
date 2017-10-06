@@ -17,6 +17,8 @@ public enum PlayerState {
 
 @objc protocol AudioPlayerDelegate: class {
 
+	var currentTime: CMTime { get set }
+
 	// Time Label
 	var timeLabel: UILabel { get set }
 
@@ -89,6 +91,9 @@ open class AudioPlayer: NSObject {
 
 	@objc func playerDidFinishPlaying(note: NSNotification) {
 		delegate?.playerProgressSlider.value = 0.0
+		currentTime = kCMTimeZero
+		delegate?.currentTime = currentTime
+		avPlayer.seek(to: currentTime)
 	}
 
 	open func configureAudioWith(avAsset: AVAsset?) {
