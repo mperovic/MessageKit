@@ -26,6 +26,8 @@ import MapKit
 
 public struct LocationMessageSnapshotOptions {
 
+	public init() {}
+	
     var showsBuildings = false
     var showsPointsOfInterest = false
     var span: MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: 0, longitudeDelta: 0)

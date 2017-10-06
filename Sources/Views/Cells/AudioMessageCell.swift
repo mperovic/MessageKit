@@ -26,6 +26,7 @@ import UIKit
 import AVFoundation
 
 open class AudioMessageCell: MessageCollectionViewCell<AudioMessageView> {
+	open override class func reuseIdentifier() -> String { return "messagekit.cell.audio" }
 
 	open override func prepareForReuse() {
 		super.prepareForReuse()

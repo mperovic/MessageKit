@@ -52,6 +52,8 @@ open class MessagesCollectionViewFlowLayout: UICollectionViewFlowLayout {
         }
     }
 
+	fileprivate var avatarMessagePadding: CGFloat = 4
+
     fileprivate var messagesCollectionView: MessagesCollectionView? {
         return collectionView as? MessagesCollectionView
     }

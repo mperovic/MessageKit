@@ -199,9 +199,7 @@ extension MessagesViewController: UICollectionViewDataSource {
             cell.configure(with: message, at: indexPath, and: messagesCollectionView)
             return cell
 		case .audio:
-			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AudioMessageCell", for: indexPath) as? AudioMessageCell else {
-				fatalError("Unable to dequeue AudioMessageCell")
-			}
+			let cell = messagesCollectionView.dequeueReusableCell(AudioMessageCell.self, for: indexPath)
 			cell.configure(with: message, at: indexPath, audioPlayer: audioPlayer, and: messagesCollectionView)
 			return cell
         }
