@@ -155,7 +155,6 @@ open class MessageLabel: UILabel, UIGestureRecognizerDelegate {
         // Message Label Specific
         self.numberOfLines = 0
         self.lineBreakMode = .byWordWrapping
-		self.font = UIFont.defaultMessageLabelFont()
 
         let defaultAttributes: [NSAttributedStringKey: Any] = [
           NSAttributedStringKey.foregroundColor: self.textColor,
