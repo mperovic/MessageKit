@@ -41,6 +41,7 @@ open class InputTextView: UITextView, UITextViewDelegate {
     open override var text: String! {
         didSet {
             placeholderLabel.isHidden = !text.isEmpty
+            messageInputBar?.textViewDidChange()
         }
     }
 
