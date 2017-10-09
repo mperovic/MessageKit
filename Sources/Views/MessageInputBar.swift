@@ -23,7 +23,6 @@
  */
 
 import UIKit
-import AVFoundation
 
 open class MessageInputBar: UIView {
     
@@ -277,13 +276,6 @@ open class MessageInputBar: UIView {
         addSubview(separatorLine)
         setStackViewItems([sendButtonImage, sendAudioButton], forStack: .right, animated: false)
         setStackViewItems([sendMediaButton], forStack: .left, animated: false)
-
-		// Check if record permissions are granted
-		if AVAudioSession.sharedInstance().recordPermission() == .granted {
-			sendAudioButton.isEnabled = true
-		} else {
-			sendAudioButton.isEnabled = false
-		}
     }
     
     private func setupConstraints() {
