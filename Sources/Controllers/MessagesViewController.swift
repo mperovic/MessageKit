@@ -36,6 +36,13 @@ open class MessagesViewController: UIViewController {
 
     open var scrollsToBottomOnKeybordBeginsEditing: Bool = false
 
+	open var additionalTopContentInset: CGFloat = 0 {
+		didSet {
+			let inset = topLayoutGuide.length + additionalTopContentInset
+			messagesCollectionView.contentInset.top = inset
+		}
+	}
+
     private var isFirstLayout: Bool = true
 
 	lazy open var audioPlayer = {
@@ -78,6 +85,13 @@ open class MessagesViewController: UIViewController {
             defer { isFirstLayout = false }
 
             addKeyboardObservers()
+			let os = ProcessInfo().operatingSystemVersion
+			switch (os.majorVersion, os.minorVersion, os.patchVersion) {
+			case (10, _, _):
+				messagesCollectionView.contentInset.top = additionalTopContentInset + topLayoutGuide.length
+			default:
+				break
+			}
             messagesCollectionView.contentInset.bottom = messageInputBar.frame.height
             messagesCollectionView.scrollIndicatorInsets.bottom = messageInputBar.frame.height
             
