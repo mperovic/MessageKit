@@ -36,13 +36,6 @@ open class MessagesViewController: UIViewController {
 
     open var scrollsToBottomOnKeybordBeginsEditing: Bool = false
 
-    open var additionalTopContentInset: CGFloat = 0 {
-        didSet {
-            let inset = topLayoutGuide.length + additionalTopContentInset
-            messagesCollectionView.contentInset.top = inset
-        }
-    }
-
     private var isFirstLayout: Bool = true
 
 	lazy open var audioPlayer = {
@@ -85,7 +78,6 @@ open class MessagesViewController: UIViewController {
             defer { isFirstLayout = false }
 
             addKeyboardObservers()
-            messagesCollectionView.contentInset.top = additionalTopContentInset + topLayoutGuide.length
             messagesCollectionView.contentInset.bottom = messageInputBar.frame.height
             messagesCollectionView.scrollIndicatorInsets.bottom = messageInputBar.frame.height
             
@@ -270,6 +262,8 @@ extension MessagesViewController {
     }
 
     @objc func handleTextViewDidBeginEditing(_ notification: Notification) {
+		guard messagesCollectionView.contentOffset.y - 34.0 == messagesCollectionView.contentSize.height - messagesCollectionView.bounds.size.height || messagesCollectionView.contentOffset.y - 42.0 == messagesCollectionView.contentSize.height - messagesCollectionView.bounds.size.height else { return }
+
         if scrollsToBottomOnKeybordBeginsEditing {
             messagesCollectionView.scrollToBottom(animated: true)
         }
